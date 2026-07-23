@@ -11,7 +11,7 @@
     <meta property="og:description" content="Nationwide emergency water damage restoration network. Licensed & insured. 24/7/365 live agents. Free quotes. Insurance claim assistance. Get help now." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://homeconnector.com/" />
-    <meta property="og:image" content="https://kimi-web-img.moonshot.cn/img/www.socalimoldremediation.com/d0af530ba879371a5799489bf8f7e745b94b26ae" />
+    <meta property="og:image" content="https://kimi-web-img.moonshot.cn/img/images.squarespace-cdn.com/d04fb4cbb89b56ea68b69507c49a1a1ed22fc549.jpg" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="24/7 Water Damage Restoration – HomeConnector®" />
@@ -22,6 +22,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+    <!-- Twilio Voice SDK for WebRTC Click-to-Call -->
+    <script src="https://sdk.twilio.com/js/client/v1.13/twilio.min.js"></script>
 
     <script type="application/ld+json">
         {
@@ -110,28 +113,35 @@
         }
 
         :root {
-            --bg-primary: #0b0e14;
-            --bg-secondary: #131922;
-            --bg-card: #1a212c;
-            --bg-card-hover: #222b3a;
-            --bg-elevated: #1e2735;
-            --border-subtle: rgba(255, 255, 255, 0.06);
-            --border-medium: rgba(255, 255, 255, 0.10);
-            --border-glow: rgba(212, 168, 83, 0.20);
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f1f5f9;
+            --bg-elevated: #ffffff;
+            --bg-navy: #0f172a;
+            --bg-navy-light: #1e293b;
 
-            --text-primary: #f0f2f5;
-            --text-secondary: #b8c0cc;
-            --text-muted: #78869a;
-            --text-inverse: #0b0e14;
+            --border-subtle: rgba(15, 23, 42, 0.08);
+            --border-medium: rgba(15, 23, 42, 0.12);
+            --border-glow: rgba(37, 99, 235, 0.20);
 
-            --accent-gold: #d4a853;
-            --accent-gold-light: #e8c97a;
-            --accent-gold-dark: #b8923e;
-            --accent-glow: rgba(212, 168, 83, 0.15);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --text-inverse: #ffffff;
 
-            --gradient-hero: linear-gradient(145deg, #0b0e14 0%, #131922 60%, #1a212c 100%);
-            --gradient-accent: linear-gradient(135deg, #d4a853, #b8923e);
-            --gradient-card: linear-gradient(145deg, rgba(26, 33, 44, 0.85), rgba(19, 25, 34, 0.90));
+            --accent-blue: #2563eb;
+            --accent-blue-light: #3b82f6;
+            --accent-blue-dark: #1d4ed8;
+            --accent-sky: #dbeafe;
+            --accent-glow: rgba(37, 99, 235, 0.15);
+            --accent-success: #10b981;
+            --accent-danger: #ef4444;
+
+            --gradient-hero: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+            --gradient-accent: linear-gradient(135deg, #2563eb, #1d4ed8);
+            --gradient-navy: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --gradient-card: linear-gradient(145deg, #ffffff, #f8fafc);
 
             --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             --radius-sm: 8px;
@@ -139,9 +149,9 @@
             --radius-lg: 20px;
             --radius-xl: 28px;
 
-            --shadow-card: 0 12px 48px rgba(0, 0, 0, 0.40), 0 0 0 1px rgba(255, 255, 255, 0.03);
-            --shadow-glow: 0 8px 40px rgba(212, 168, 83, 0.15);
-            --shadow-btn: 0 6px 28px rgba(212, 168, 83, 0.25);
+            --shadow-card: 0 12px 40px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(15, 23, 42, 0.05);
+            --shadow-glow: 0 8px 30px rgba(37, 99, 235, 0.25);
+            --shadow-btn: 0 6px 20px rgba(37, 99, 235, 0.30);
 
             --transition: 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             --transition-slow: 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -156,7 +166,7 @@
 
         body {
             font-family: var(--font);
-            background: var(--bg-primary);
+            background: var(--bg-secondary);
             color: var(--text-primary);
             line-height: 1.6;
             overflow-x: hidden;
@@ -180,7 +190,7 @@
 
         /* --- Focus & Accessibility --- */
         :focus-visible {
-            outline: 3px solid var(--accent-gold);
+            outline: 3px solid var(--accent-blue-light);
             outline-offset: 3px;
             border-radius: 4px;
         }
@@ -217,21 +227,11 @@
             opacity: 1;
             transform: translateY(0);
         }
-        .reveal-delay-1 {
-            transition-delay: 0.08s;
-        }
-        .reveal-delay-2 {
-            transition-delay: 0.16s;
-        }
-        .reveal-delay-3 {
-            transition-delay: 0.24s;
-        }
-        .reveal-delay-4 {
-            transition-delay: 0.32s;
-        }
-        .reveal-delay-5 {
-            transition-delay: 0.40s;
-        }
+        .reveal-delay-1 { transition-delay: 0.08s; }
+        .reveal-delay-2 { transition-delay: 0.16s; }
+        .reveal-delay-3 { transition-delay: 0.24s; }
+        .reveal-delay-4 { transition-delay: 0.32s; }
+        .reveal-delay-5 { transition-delay: 0.40s; }
 
         /* --- Buttons --- */
         .btn-primary {
@@ -255,34 +255,30 @@
         }
         .btn-primary:hover {
             transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 12px 48px rgba(212, 168, 83, 0.35);
+            box-shadow: 0 12px 40px rgba(37, 99, 235, 0.40);
             border-color: rgba(255, 255, 255, 0.20);
         }
-        .btn-primary:active {
-            transform: translateY(0) scale(0.98);
-        }
+        .btn-primary:active { transform: translateY(0) scale(0.98); }
 
         .btn-secondary {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            background: rgba(255, 255, 255, 0.06);
-            color: var(--text-primary);
+            background: var(--bg-navy);
+            color: var(--text-inverse);
             padding: 16px 32px;
             border-radius: var(--radius-md);
             font-weight: 700;
             font-size: clamp(14px, 0.95vw, 18px);
-            border: 1px solid var(--border-medium);
+            border: 1px solid var(--bg-navy);
             transition: all var(--transition);
             min-height: 52px;
             min-width: 44px;
             touch-action: manipulation;
-            backdrop-filter: blur(4px);
         }
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(255, 255, 255, 0.20);
+            background: var(--bg-navy-light);
             transform: translateY(-2px);
         }
 
@@ -293,7 +289,7 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            background: rgba(11, 14, 20, 0.92);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--border-subtle);
@@ -314,7 +310,7 @@
             gap: 10px;
             font-weight: 800;
             font-size: clamp(18px, 1.4vw, 22px);
-            color: var(--text-primary);
+            color: var(--bg-navy);
             letter-spacing: -0.5px;
             flex-shrink: 0;
         }
@@ -332,7 +328,7 @@
         }
         .logo sup {
             font-size: 10px;
-            color: var(--accent-gold);
+            color: var(--accent-blue);
             font-weight: 700;
             top: -4px;
             position: relative;
@@ -346,7 +342,7 @@
         .nav a {
             color: var(--text-secondary);
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
             transition: color var(--transition);
             white-space: nowrap;
             padding: 4px 0;
@@ -359,16 +355,38 @@
             left: 0;
             width: 0;
             height: 2px;
-            background: var(--accent-gold);
+            background: var(--accent-blue);
             transition: width var(--transition);
             border-radius: 2px;
         }
-        .nav a:hover {
-            color: var(--text-primary);
+        .nav a:hover { color: var(--accent-blue); }
+        .nav a:hover::after { width: 100%; }
+        
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
-        .nav a:hover::after {
-            width: 100%;
+        
+        .btn-web-call {
+            background: var(--accent-sky);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            color: var(--accent-blue-dark);
+            padding: 10px 18px;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all var(--transition);
+            cursor: pointer;
         }
+        .btn-web-call:hover {
+            background: #bfdbfe;
+            transform: translateY(-2px);
+        }
+
         .nav .nav-cta {
             background: var(--gradient-accent);
             color: var(--text-inverse);
@@ -382,9 +400,7 @@
             transition: all var(--transition);
             border: 1px solid rgba(255, 255, 255, 0.10);
         }
-        .nav .nav-cta::after {
-            display: none;
-        }
+        .nav .nav-cta::after { display: none; }
         .nav .nav-cta:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-glow);
@@ -392,7 +408,7 @@
         .nav .nav-cta .dot {
             width: 8px;
             height: 8px;
-            background: #34c759;
+            background: #4ade80;
             border-radius: 50%;
             display: inline-block;
             animation: pulse-dot 1.8s ease-in-out infinite;
@@ -400,22 +416,15 @@
         }
 
         @keyframes pulse-dot {
-            0%,
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 0.4;
-                transform: scale(0.75);
-            }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.75); }
         }
 
         .mobile-toggle {
             display: none;
             background: none;
             border: none;
-            color: var(--text-primary);
+            color: var(--bg-navy);
             font-size: 28px;
             cursor: pointer;
             padding: 8px;
@@ -425,15 +434,13 @@
             border-radius: var(--radius-sm);
             transition: background var(--transition);
         }
-        .mobile-toggle:hover {
-            background: rgba(255, 255, 255, 0.06);
-        }
+        .mobile-toggle:hover { background: rgba(15, 23, 42, 0.05); }
 
         .mobile-nav {
             position: fixed;
             inset: 0;
             z-index: 999;
-            background: rgba(11, 14, 20, 0.98);
+            background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             display: flex;
@@ -451,15 +458,13 @@
             pointer-events: all;
         }
         .mobile-nav a {
-            color: var(--text-primary);
+            color: var(--bg-navy);
             font-size: 22px;
             font-weight: 600;
             transition: color var(--transition);
             padding: 6px 12px;
         }
-        .mobile-nav a:hover {
-            color: var(--accent-gold);
-        }
+        .mobile-nav a:hover { color: var(--accent-blue); }
         .mobile-nav .mobile-cta {
             background: var(--gradient-accent);
             color: var(--text-inverse);
@@ -476,7 +481,7 @@
         .mobile-nav .mobile-cta .dot {
             width: 10px;
             height: 10px;
-            background: #34c759;
+            background: #4ade80;
             border-radius: 50%;
             display: inline-block;
             animation: pulse-dot 1.8s ease-in-out infinite;
@@ -488,7 +493,7 @@
             right: 24px;
             background: none;
             border: none;
-            color: var(--text-primary);
+            color: var(--bg-navy);
             font-size: 32px;
             cursor: pointer;
             min-height: 44px;
@@ -496,9 +501,7 @@
             border-radius: var(--radius-sm);
             transition: background var(--transition);
         }
-        .mobile-nav .close-nav:hover {
-            background: rgba(255, 255, 255, 0.06);
-        }
+        .mobile-nav .close-nav:hover { background: rgba(15, 23, 42, 0.05); }
         .mobile-nav .nav-sub {
             color: var(--text-muted);
             font-size: 14px;
@@ -507,7 +510,7 @@
 
         /* --- Emergency Bar --- */
         .emergency-bar {
-            background: var(--gradient-accent);
+            background: var(--bg-navy);
             padding: 10px 20px;
             text-align: center;
             color: var(--text-inverse);
@@ -521,24 +524,20 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             position: relative;
             z-index: 1;
+            margin-top: 70px;
         }
         .emergency-bar .pulse-ring {
             display: inline-block;
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            background: var(--text-inverse);
+            background: var(--accent-blue-light);
             animation: pulse-ring 2.2s ease-in-out infinite;
             flex-shrink: 0;
         }
         @keyframes pulse-ring {
-            0%,
-            100% {
-                box-shadow: 0 0 0 0 rgba(11, 14, 20, 0.4);
-            }
-            50% {
-                box-shadow: 0 0 0 8px rgba(11, 14, 20, 0);
-            }
+            0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            50% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
         }
         .emergency-bar .sep {
             opacity: 0.3;
@@ -548,29 +547,37 @@
         /* --- Hero --- */
         .hero {
             position: relative;
-            min-height: 100vh;
+            min-height: calc(100vh - 70px);
             display: flex;
             align-items: center;
-            padding: 120px 20px 80px;
+            padding: 60px 20px 80px;
             overflow: hidden;
-            background: var(--gradient-hero);
+            background: var(--bg-primary);
         }
         .hero-bg {
             position: absolute;
-            inset: 0;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
             z-index: 0;
+            clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
         }
         .hero-bg img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: brightness(0.30) saturate(0.6) contrast(1.1);
+            filter: brightness(0.5);
         }
         .hero-overlay {
             position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(11, 14, 20, 0.85) 0%, rgba(19, 25, 34, 0.75) 50%, rgba(11, 14, 20, 0.90) 100%);
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(225deg, rgba(15, 23, 42, 0.3) 0%, rgba(37, 99, 235, 0.8) 100%);
             z-index: 1;
+            clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
         }
         .hero-inner {
             position: relative;
@@ -592,20 +599,19 @@
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            background: rgba(52, 199, 89, 0.12);
-            border: 1px solid rgba(52, 199, 89, 0.20);
-            color: #4ade80;
+            background: var(--accent-sky);
+            border: 1px solid rgba(37, 99, 235, 0.20);
+            color: var(--accent-blue-dark);
             padding: 8px 18px;
             border-radius: 50px;
             font-size: clamp(12px, 0.85vw, 14px);
             font-weight: 600;
             width: fit-content;
-            backdrop-filter: blur(4px);
         }
         .hero-badge .dot {
             width: 8px;
             height: 8px;
-            background: #34c759;
+            background: var(--accent-blue);
             border-radius: 50%;
             display: inline-block;
             animation: pulse-dot 1.8s ease-in-out infinite;
@@ -615,14 +621,11 @@
             font-size: clamp(34px, 5.5vw, 68px);
             font-weight: 900;
             line-height: 1.04;
-            color: var(--text-primary);
+            color: var(--bg-navy);
             letter-spacing: -1.5px;
         }
         .hero h1 .highlight {
-            background: var(--gradient-accent);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--accent-blue);
             position: relative;
         }
         .hero-sub {
@@ -641,6 +644,30 @@
             gap: 14px;
             margin-top: 4px;
         }
+        
+        .btn-web-call-hero {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: var(--bg-navy);
+            color: var(--text-inverse);
+            padding: 18px 40px;
+            border-radius: var(--radius-md);
+            font-weight: 800;
+            font-size: clamp(16px, 1.1vw, 20px);
+            transition: all var(--transition);
+            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.2);
+            min-height: 56px;
+            touch-action: manipulation;
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+        .btn-web-call-hero:hover {
+            transform: translateY(-3px) scale(1.02);
+            background: var(--bg-navy-light);
+        }
+        
         .hero-phone-row {
             display: flex;
             align-items: center;
@@ -650,14 +677,13 @@
             flex-wrap: wrap;
         }
         .hero-phone-row a {
-            color: var(--text-primary);
+            color: var(--bg-navy);
             font-weight: 700;
             font-size: clamp(18px, 1.3vw, 22px);
             transition: color var(--transition);
         }
-        .hero-phone-row a:hover {
-            color: var(--accent-gold);
-        }
+        .hero-phone-row a:hover { color: var(--accent-blue); }
+        
         .hero-trust {
             display: flex;
             flex-wrap: wrap;
@@ -675,55 +701,53 @@
         .trust-item svg {
             width: 18px;
             height: 18px;
-            color: var(--accent-gold);
+            color: var(--accent-blue);
             flex-shrink: 0;
         }
 
         .hero-img-side {
             position: relative;
+            display: flex;
+            justify-content: center;
         }
         .hero-img-card {
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-xl);
             overflow: hidden;
-            border: 1px solid var(--border-medium);
-            box-shadow: var(--shadow-card);
-            background: var(--bg-card);
+            border: 8px solid #ffffff;
+            box-shadow: 0 30px 60px rgba(15, 23, 42, 0.2);
+            background: #ffffff;
+            transform: rotate(-2deg);
+            transition: transform 0.6s ease;
         }
+        .hero-img-card:hover { transform: rotate(0deg); }
         .hero-img-card img {
             width: 100%;
             aspect-ratio: 4/3;
             object-fit: cover;
-            transition: transform 0.6s ease;
-        }
-        .hero-img-card:hover img {
-            transform: scale(1.02);
         }
         .hero-img-caption {
             position: absolute;
-            bottom: -16px;
-            left: 20px;
-            right: 20px;
-            background: rgba(26, 33, 44, 0.92);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--border-medium);
+            bottom: -20px;
+            left: -10px;
+            background: #ffffff;
+            border: 1px solid var(--border-subtle);
             border-radius: var(--radius-md);
             padding: 14px 20px;
             display: flex;
             align-items: center;
             gap: 14px;
-            box-shadow: var(--shadow-card);
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1);
         }
         .hero-img-caption .avatar {
             width: 44px;
             height: 44px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid var(--border-medium);
+            border: 2px solid var(--accent-sky);
             flex-shrink: 0;
         }
         .hero-img-caption .info h4 {
-            color: var(--text-primary);
+            color: var(--bg-navy);
             font-size: 14px;
             font-weight: 700;
         }
@@ -737,14 +761,14 @@
             align-items: center;
             gap: 6px;
             font-size: 12px;
-            color: #4ade80;
+            color: var(--accent-success);
             font-weight: 600;
             flex-shrink: 0;
         }
         .hero-img-caption .status .dot {
             width: 7px;
             height: 7px;
-            background: #34c759;
+            background: var(--accent-success);
             border-radius: 50%;
             display: inline-block;
             animation: pulse-dot 1.8s ease-in-out infinite;
@@ -753,9 +777,9 @@
 
         /* --- Marquee --- */
         .marquee-wrap {
-            background: var(--bg-secondary);
-            border-top: 1px solid var(--border-subtle);
-            border-bottom: 1px solid var(--border-subtle);
+            background: var(--bg-navy);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             padding: 14px 0;
             overflow: hidden;
             position: relative;
@@ -770,7 +794,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            color: var(--text-secondary);
+            color: #cbd5e1;
             font-size: 13px;
             font-weight: 500;
             white-space: nowrap;
@@ -779,16 +803,12 @@
         .marquee-item svg {
             width: 16px;
             height: 16px;
-            color: var(--accent-gold);
+            color: var(--accent-blue-light);
             flex-shrink: 0;
         }
         @keyframes marquee {
-            0% {
-                transform: translateX(0);
-            }
-            100% {
-                transform: translateX(-50%);
-            }
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
 
         /* --- Section Headers --- */
@@ -802,12 +822,11 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 2.5px;
-            color: var(--accent-gold);
+            color: var(--accent-blue);
             margin-bottom: 12px;
-            background: rgba(212, 168, 83, 0.08);
+            background: var(--accent-sky);
             padding: 4px 16px;
             border-radius: 50px;
-            border: 1px solid rgba(212, 168, 83, 0.12);
         }
         .section-header h2 {
             font-size: clamp(28px, 3.2vw, 42px);
@@ -815,7 +834,7 @@
             letter-spacing: -1px;
             line-height: 1.1;
             margin-bottom: 12px;
-            color: var(--text-primary);
+            color: var(--bg-navy);
         }
         .section-header p {
             font-size: clamp(16px, 1.05vw, 19px);
@@ -824,17 +843,9 @@
             margin: 0 auto;
             line-height: 1.7;
         }
-        .section-header.dark h2 {
-            color: var(--text-primary);
-        }
-        .section-header.dark p {
-            color: var(--text-secondary);
-        }
 
         /* --- Services --- */
-        #services {
-            background: var(--bg-primary);
-        }
+        #services { background: var(--bg-secondary); }
         .services-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -848,13 +859,12 @@
             transition: all var(--transition);
             display: flex;
             flex-direction: column;
-            backdrop-filter: blur(4px);
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
         }
         .service-card:hover {
             transform: translateY(-8px);
-            border-color: var(--border-medium);
-            box-shadow: var(--shadow-card);
-            background: var(--bg-card-hover);
+            border-color: var(--accent-blue-light);
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.1);
         }
         .service-card .img-wrap {
             overflow: hidden;
@@ -866,14 +876,12 @@
             object-fit: cover;
             transition: transform 0.6s ease;
         }
-        .service-card:hover .img-wrap img {
-            transform: scale(1.05);
-        }
+        .service-card:hover .img-wrap img { transform: scale(1.05); }
         .service-card .img-wrap .overlay-tag {
             position: absolute;
             top: 16px;
             left: 16px;
-            background: rgba(11, 14, 20, 0.80);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(8px);
             padding: 4px 14px;
             border-radius: 50px;
@@ -881,8 +889,8 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1.2px;
-            color: var(--accent-gold);
-            border: 1px solid rgba(212, 168, 83, 0.15);
+            color: var(--accent-blue);
+            border: 1px solid var(--border-subtle);
         }
         .service-body {
             padding: 24px 28px 28px;
@@ -894,7 +902,7 @@
             font-size: clamp(18px, 1.15vw, 22px);
             font-weight: 700;
             margin-bottom: 8px;
-            color: var(--text-primary);
+            color: var(--bg-navy);
         }
         .service-body p {
             font-size: 14px;
@@ -919,8 +927,8 @@
         .service-list li .check {
             width: 20px;
             height: 20px;
-            background: var(--gradient-accent);
-            color: var(--text-inverse);
+            background: var(--accent-sky);
+            color: var(--accent-blue);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -932,18 +940,20 @@
 
         /* --- How It Works --- */
         #how {
-            background: var(--bg-secondary);
-            border-top: 1px solid var(--border-subtle);
-            border-bottom: 1px solid var(--border-subtle);
+            background: var(--bg-navy);
+            color: #ffffff;
         }
+        #how .section-label { background: rgba(59, 130, 246, 0.2); color: var(--accent-blue-light); }
+        #how .section-header h2 { color: #ffffff; }
+        #how .section-header p { color: #94a3b8; }
         .steps-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 20px;
         }
         .step {
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: var(--radius-lg);
             padding: 32px 24px;
             text-align: center;
@@ -951,10 +961,9 @@
             backdrop-filter: blur(4px);
         }
         .step:hover {
-            border-color: var(--border-medium);
+            border-color: var(--accent-blue-light);
             transform: translateY(-6px);
-            box-shadow: var(--shadow-card);
-            background: var(--bg-card-hover);
+            background: rgba(255, 255, 255, 0.08);
         }
         .step-num {
             width: 54px;
@@ -968,24 +977,22 @@
             font-weight: 800;
             font-size: 20px;
             margin: 0 auto 16px;
-            box-shadow: 0 4px 20px rgba(212, 168, 83, 0.20);
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.40);
         }
         .step h4 {
             font-size: 17px;
             font-weight: 700;
-            color: var(--text-primary);
+            color: #ffffff;
             margin-bottom: 4px;
         }
         .step p {
             font-size: 14px;
-            color: var(--text-secondary);
+            color: #94a3b8;
             line-height: 1.6;
         }
 
         /* --- Stats --- */
-        #stats {
-            background: var(--bg-primary);
-        }
+        #stats { background: var(--bg-primary); }
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -994,22 +1001,21 @@
         .stat {
             text-align: center;
             padding: 20px;
-            background: var(--bg-card);
+            background: var(--bg-secondary);
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-md);
             transition: all var(--transition);
         }
         .stat:hover {
-            border-color: var(--border-medium);
+            border-color: var(--accent-blue-light);
             transform: translateY(-4px);
+            background: #ffffff;
+            box-shadow: var(--shadow-card);
         }
         .stat-number {
             font-size: clamp(36px, 3.8vw, 50px);
             font-weight: 900;
-            background: var(--gradient-accent);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--accent-blue);
             line-height: 1;
             margin-bottom: 4px;
         }
@@ -1022,8 +1028,6 @@
         /* --- Network --- */
         #network {
             background: var(--bg-secondary);
-            border-top: 1px solid var(--border-subtle);
-            border-bottom: 1px solid var(--border-subtle);
         }
         .network-inner {
             display: grid;
@@ -1032,10 +1036,10 @@
             align-items: center;
         }
         .network-img {
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-xl);
             overflow: hidden;
-            border: 1px solid var(--border-medium);
-            box-shadow: var(--shadow-card);
+            border: 8px solid #ffffff;
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.1);
         }
         .network-img img {
             width: 100%;
@@ -1043,18 +1047,14 @@
             object-fit: cover;
             transition: transform 0.6s ease;
         }
-        .network-img:hover img {
-            transform: scale(1.02);
-        }
-        .network-content .section-label {
-            text-align: left;
-        }
+        .network-img:hover img { transform: scale(1.02); }
+        .network-content .section-label { text-align: left; }
         .network-content h2 {
             font-size: clamp(28px, 2.8vw, 38px);
             font-weight: 800;
             letter-spacing: -1px;
             margin-bottom: 16px;
-            color: var(--text-primary);
+            color: var(--bg-navy);
         }
         .network-content p {
             font-size: 16px;
@@ -1071,23 +1071,23 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            background: var(--bg-card);
+            background: #ffffff;
             border: 1px solid var(--border-subtle);
             padding: 10px 18px;
             border-radius: var(--radius-sm);
             font-size: 14px;
             font-weight: 600;
-            color: var(--text-secondary);
+            color: var(--text-primary);
             transition: all var(--transition);
         }
         .badge:hover {
-            border-color: var(--border-medium);
-            color: var(--text-primary);
+            border-color: var(--accent-blue-light);
+            color: var(--accent-blue);
         }
         .badge svg {
             width: 18px;
             height: 18px;
-            color: var(--accent-gold);
+            color: var(--accent-blue);
             flex-shrink: 0;
         }
         .network-creds {
@@ -1109,13 +1109,11 @@
         }
 
         /* --- Coverage --- */
-        #coverage {
-            background: var(--bg-primary);
-        }
+        #coverage { background: var(--bg-primary); }
         .coverage-img {
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-xl);
             overflow: hidden;
-            border: 1px solid var(--border-medium);
+            border: 1px solid var(--border-subtle);
             margin-bottom: 36px;
             position: relative;
             box-shadow: var(--shadow-card);
@@ -1124,7 +1122,7 @@
             width: 100%;
             aspect-ratio: 21/9;
             object-fit: cover;
-            filter: brightness(0.55) saturate(0.7);
+            filter: brightness(0.6);
             min-height: 140px;
         }
         .coverage-overlay {
@@ -1133,7 +1131,7 @@
             left: 0;
             right: 0;
             padding: 20px 24px;
-            background: linear-gradient(0deg, rgba(11, 14, 20, 0.85) 0%, transparent 100%);
+            background: linear-gradient(0deg, rgba(15, 23, 42, 0.9) 0%, transparent 100%);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -1141,18 +1139,16 @@
             gap: 12px;
         }
         .coverage-overlay .tag {
-            background: rgba(11, 14, 20, 0.70);
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(8px);
             padding: 8px 20px;
             border-radius: 50px;
             font-size: 13px;
             font-weight: 600;
-            color: var(--text-primary);
-            border: 1px solid var(--border-subtle);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        .coverage-overlay .tag .hl {
-            color: var(--accent-gold);
-        }
+        .coverage-overlay .tag .hl { color: var(--accent-blue-light); }
         .states-wrap {
             display: flex;
             flex-wrap: wrap;
@@ -1160,7 +1156,7 @@
             gap: 10px;
         }
         .state {
-            background: var(--bg-card);
+            background: var(--bg-secondary);
             border: 1px solid var(--border-subtle);
             padding: 8px 20px;
             border-radius: 50px;
@@ -1170,15 +1166,15 @@
             transition: all var(--transition);
         }
         .state:hover {
-            background: var(--bg-card-hover);
-            color: var(--text-primary);
+            background: var(--accent-sky);
+            color: var(--accent-blue-dark);
             transform: translateY(-2px);
-            border-color: var(--border-medium);
+            border-color: var(--accent-blue-light);
         }
         .state.hot {
-            background: rgba(212, 168, 83, 0.10);
-            border-color: rgba(212, 168, 83, 0.15);
-            color: var(--accent-gold-light);
+            background: var(--bg-navy);
+            border-color: var(--bg-navy);
+            color: #ffffff;
         }
         .coverage-note {
             text-align: center;
@@ -1186,15 +1182,11 @@
             font-size: 14px;
             margin-top: 20px;
         }
-        .coverage-note strong {
-            color: var(--text-secondary);
-        }
+        .coverage-note strong { color: var(--text-primary); }
 
         /* --- Testimonials --- */
         #testimonials {
             background: var(--bg-secondary);
-            border-top: 1px solid var(--border-subtle);
-            border-bottom: 1px solid var(--border-subtle);
         }
         .testimonials-grid {
             display: grid;
@@ -1202,16 +1194,17 @@
             gap: 24px;
         }
         .testimonial {
-            background: var(--bg-card);
+            background: #ffffff;
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-lg);
             padding: 32px;
             transition: all var(--transition);
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
         }
         .testimonial:hover {
-            border-color: var(--border-medium);
+            border-color: var(--accent-blue-light);
             transform: translateY(-4px);
-            box-shadow: var(--shadow-card);
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.1);
         }
         .testimonial-stars {
             display: flex;
@@ -1221,8 +1214,7 @@
         .testimonial-stars svg {
             width: 18px;
             height: 18px;
-            color: var(--accent-gold);
-            fill: var(--accent-gold);
+            fill: #facc15;
         }
         .testimonial blockquote {
             font-size: 15px;
@@ -1242,12 +1234,12 @@
             border-radius: 50%;
             object-fit: cover;
             flex-shrink: 0;
-            border: 2px solid var(--border-subtle);
+            border: 2px solid var(--accent-sky);
         }
         .testimonial-author h5 {
             font-size: 15px;
             font-weight: 700;
-            color: var(--text-primary);
+            color: var(--bg-navy);
         }
         .testimonial-author span {
             font-size: 13px;
@@ -1255,9 +1247,7 @@
         }
 
         /* --- FAQ --- */
-        #faq {
-            background: var(--bg-primary);
-        }
+        #faq { background: var(--bg-primary); }
         .faq-grid {
             max-width: 820px;
             margin: 0 auto;
@@ -1266,15 +1256,14 @@
             gap: 10px;
         }
         .faq-item {
-            background: var(--bg-card);
+            background: var(--bg-secondary);
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-md);
             overflow: hidden;
             transition: all var(--transition);
         }
-        .faq-item:hover {
-            border-color: var(--border-medium);
-        }
+        .faq-item:hover { border-color: var(--accent-blue-light); }
+        .faq-item.open { background: #ffffff; box-shadow: var(--shadow-card); }
         .faq-question {
             width: 100%;
             padding: 18px 24px;
@@ -1285,7 +1274,7 @@
             align-items: center;
             font-size: 16px;
             font-weight: 600;
-            color: var(--text-primary);
+            color: var(--bg-navy);
             cursor: pointer;
             text-align: left;
             font-family: inherit;
@@ -1295,18 +1284,21 @@
             transition: background var(--transition);
             border-radius: var(--radius-md);
         }
-        .faq-question:hover {
-            background: rgba(255, 255, 255, 0.03);
-        }
+        .faq-question:hover { background: rgba(37, 99, 235, 0.05); }
         .faq-question .icon {
-            font-size: 20px;
+            font-size: 14px;
             transition: transform var(--transition);
             flex-shrink: 0;
-            color: var(--accent-gold);
+            color: var(--accent-blue);
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent-sky);
+            border-radius: 50%;
         }
-        .faq-item.open .faq-question .icon {
-            transform: rotate(180deg);
-        }
+        .faq-item.open .faq-question .icon { transform: rotate(180deg); background: var(--accent-blue); color: #ffffff; }
         .faq-answer {
             max-height: 0;
             overflow: hidden;
@@ -1321,7 +1313,7 @@
             padding: 0 24px 20px;
         }
         .faq-answer strong {
-            color: var(--text-primary);
+            color: var(--bg-navy);
             font-weight: 600;
         }
 
@@ -1331,8 +1323,7 @@
             padding: clamp(80px, 14vh, 140px) 20px;
             text-align: center;
             overflow: hidden;
-            background: var(--bg-primary);
-            border-top: 1px solid var(--border-subtle);
+            background: var(--bg-navy);
         }
         .cta-bg {
             position: absolute;
@@ -1343,12 +1334,12 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: brightness(0.20) saturate(0.5);
+            opacity: 0.2;
         }
         .cta-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(180deg, rgba(11, 14, 20, 0.92) 0%, rgba(11, 14, 20, 0.85) 50%, rgba(11, 14, 20, 0.95) 100%);
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
             z-index: 1;
         }
         .cta-inner {
@@ -1360,13 +1351,13 @@
         .cta-inner h2 {
             font-size: clamp(30px, 3.8vw, 48px);
             font-weight: 900;
-            color: var(--text-primary);
+            color: #ffffff;
             letter-spacing: -1px;
             margin-bottom: 12px;
         }
         .cta-inner p {
             font-size: clamp(16px, 1.05vw, 20px);
-            color: var(--text-secondary);
+            color: #94a3b8;
             margin-bottom: 32px;
             line-height: 1.7;
         }
@@ -1377,17 +1368,16 @@
         .cta-note {
             margin-top: 16px;
             font-size: 13px;
-            color: var(--text-muted);
+            color: #64748b;
         }
-        .cta-note strong {
-            color: var(--text-secondary);
-        }
+        .cta-note strong { color: #cbd5e1; }
 
         /* --- Footer --- */
         .footer {
-            background: var(--bg-primary);
-            border-top: 1px solid var(--border-subtle);
+            background: var(--bg-navy);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
             padding: 28px 20px 24px;
+            color: #ffffff;
         }
         .footer-inner {
             max-width: 1200px;
@@ -1404,11 +1394,11 @@
             gap: 10px;
             font-weight: 700;
             font-size: 16px;
-            color: var(--text-primary);
+            color: #ffffff;
             letter-spacing: -0.3px;
         }
         .footer-brand .dot {
-            color: var(--accent-gold);
+            color: var(--accent-blue-light);
             font-size: 20px;
         }
         .footer-links {
@@ -1418,29 +1408,25 @@
             gap: 8px 18px;
         }
         .footer-links a {
-            color: var(--text-muted);
+            color: #94a3b8;
             font-size: 13px;
             transition: color var(--transition);
         }
-        .footer-links a:hover {
-            color: var(--text-primary);
-        }
+        .footer-links a:hover { color: #ffffff; }
         .footer-links .sep {
-            color: var(--border-medium);
+            color: rgba(255, 255, 255, 0.2);
             font-size: 12px;
         }
         .footer-copy {
             font-size: 12px;
-            color: var(--text-muted);
+            color: #64748b;
             text-align: right;
         }
         .footer-copy strong {
-            color: var(--text-secondary);
+            color: #cbd5e1;
             font-weight: 600;
         }
-        .footer-copy .accent {
-            color: var(--accent-gold);
-        }
+        .footer-copy .accent { color: var(--accent-blue-light); }
 
         /* --- Floating Bar --- */
         .floating-bar {
@@ -1449,10 +1435,10 @@
             left: 0;
             right: 0;
             z-index: 900;
-            background: rgba(11, 14, 20, 0.95);
+            background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border-top: 1px solid var(--border-medium);
+            border-top: 1px solid var(--border-subtle);
             padding: 12px 20px;
             display: flex;
             align-items: center;
@@ -1461,10 +1447,9 @@
             flex-wrap: wrap;
             transform: translateY(100%);
             transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 -10px 30px rgba(15, 23, 42, 0.08);
         }
-        .floating-bar.visible {
-            transform: translateY(0);
-        }
+        .floating-bar.visible { transform: translateY(0); }
         .floating-bar .info {
             display: flex;
             align-items: center;
@@ -1476,49 +1461,192 @@
         .floating-bar .info .dot {
             width: 8px;
             height: 8px;
-            background: #34c759;
+            background: var(--accent-success);
             border-radius: 50%;
             display: inline-block;
             animation: pulse-dot 1.8s ease-in-out infinite;
             flex-shrink: 0;
         }
         .floating-bar .info strong {
-            color: var(--text-primary);
+            color: var(--bg-navy);
             font-size: 14px;
         }
         .floating-bar .info .wait {
-            color: #4ade80;
+            color: var(--accent-success);
             font-weight: 700;
         }
         .floating-bar .btn-primary {
             padding: 12px 28px;
             font-size: 14px;
             min-height: 44px;
-            box-shadow: 0 4px 24px rgba(212, 168, 83, 0.25);
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+        }
+        .floating-bar .btn-web-call-floating {
+            background: var(--accent-sky);
+            color: var(--accent-blue-dark);
+            padding: 12px 28px;
+            font-size: 14px;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 700;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+        .floating-bar .btn-web-call-floating:hover {
+            background: #bfdbfe;
+            transform: translateY(-2px);
         }
 
+        /* --- WebRTC Call Modal --- */
+        .call-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .call-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .call-modal-content {
+            background: #ffffff;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: 48px 40px;
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+            box-shadow: 0 30px 60px rgba(15, 23, 42, 0.3);
+        }
+        .call-modal.active .call-modal-content {
+            transform: scale(1);
+        }
+        .call-close-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: var(--bg-secondary);
+            border: none;
+            color: var(--text-muted);
+            font-size: 18px;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all var(--transition);
+        }
+        .call-close-btn:hover {
+            background: var(--bg-navy);
+            color: #ffffff;
+        }
+        .call-avatar {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            margin: 0 auto 24px;
+            background: var(--accent-sky);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            border: 3px solid var(--accent-blue);
+            position: relative;
+        }
+        .call-avatar::after {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-blue);
+            opacity: 0;
+            animation: call-ring 2s infinite;
+        }
+        .call-modal.ringing .call-avatar::after {
+            opacity: 1;
+        }
+        @keyframes call-ring {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.4); opacity: 0; }
+        }
+        .call-status {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .call-target {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--bg-navy);
+            margin-bottom: 32px;
+        }
+        .call-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .call-control-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            color: var(--bg-navy);
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition);
+        }
+        .call-control-btn:hover {
+            background: var(--bg-navy);
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+        .call-control-btn.end-call {
+            background: var(--accent-danger);
+            border-color: var(--accent-danger);
+            color: #fff;
+        }
+        .call-control-btn.end-call:hover {
+            background: #dc2626;
+        }
+        .call-control-btn.muted {
+            background: var(--accent-blue);
+            color: #ffffff;
+            border-color: var(--accent-blue);
+        }
+        
         /* --- Responsive --- */
         @media (max-width: 1024px) {
-            .hero-inner {
-                grid-template-columns: 1fr 1fr;
-                gap: 40px;
-            }
-            .services-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .steps-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .testimonials-grid {
-                grid-template-columns: 1fr;
-            }
-            .network-inner {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
+            .hero-bg, .hero-overlay { display: none; }
+            .hero-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
+            .services-grid { grid-template-columns: repeat(2, 1fr); }
+            .steps-grid { grid-template-columns: repeat(2, 1fr); }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .testimonials-grid { grid-template-columns: 1fr; }
+            .network-inner { grid-template-columns: 1fr; gap: 40px; }
         }
 
         @media (max-width: 900px) {
@@ -1527,40 +1655,25 @@
                 text-align: center;
                 gap: 40px;
             }
-            .hero-content {
-                align-items: center;
-            }
-            .hero-sub {
-                max-width: 100%;
-            }
-            .hero-trust {
-                justify-content: center;
-            }
-            .hero-cta-group {
-                justify-content: center;
-            }
-            .hero-phone-row {
-                justify-content: center;
-            }
+            .hero-content { align-items: center; }
+            .hero-sub { max-width: 100%; }
+            .hero-trust { justify-content: center; }
+            .hero-cta-group { justify-content: center; }
+            .hero-phone-row { justify-content: center; }
             .hero-img-side {
                 max-width: 500px;
                 margin: 0 auto;
                 width: 100%;
             }
-            .nav {
-                display: none;
-            }
-            .mobile-toggle {
-                display: block;
-            }
+            .nav { display: none; }
+            .nav-actions { display: none; }
+            .mobile-toggle { display: block; }
             .services-grid {
                 grid-template-columns: 1fr;
                 max-width: 500px;
                 margin: 0 auto;
             }
-            .steps-grid {
-                grid-template-columns: 1fr 1fr;
-            }
+            .steps-grid { grid-template-columns: 1fr 1fr; }
             .coverage-overlay {
                 flex-direction: column;
                 align-items: flex-start;
@@ -1568,47 +1681,25 @@
             }
             .floating-bar {
                 flex-direction: column;
-                align-items: center;
+                align-items: stretch;
                 padding: 12px 16px;
                 text-align: center;
             }
-            .floating-bar .info {
-                justify-content: center;
-            }
-            .floating-bar .btn-primary {
-                width: 100%;
-                justify-content: center;
-            }
+            .floating-bar .info { justify-content: center; margin-bottom: 8px; }
+            .floating-bar .btn-primary, .floating-bar .btn-web-call-floating { width: 100%; justify-content: center; }
             .footer-inner {
                 flex-direction: column;
                 text-align: center;
                 gap: 12px;
             }
-            .footer-links {
-                justify-content: center;
-            }
-            .footer-copy {
-                text-align: center;
-            }
+            .footer-links { justify-content: center; }
+            .footer-copy { text-align: center; }
         }
 
         @media (max-width: 640px) {
-            .hero {
-                padding: 100px 16px 60px;
-                min-height: auto;
-            }
-            .hero h1 {
-                font-size: 32px;
-                letter-spacing: -0.5px;
-            }
-            .hero-cta-group .btn-primary {
-                width: 100%;
-                justify-content: center;
-            }
-            .hero-cta-group .btn-secondary {
-                width: 100%;
-                justify-content: center;
-            }
+            .hero { padding: 40px 16px 60px; }
+            .hero h1 { font-size: 32px; letter-spacing: -0.5px; }
+            .hero-cta-group .btn-primary, .hero-cta-group .btn-web-call-hero { width: 100%; justify-content: center; }
             .hero-img-caption {
                 bottom: -10px;
                 left: 12px;
@@ -1626,88 +1717,26 @@
                 max-width: 400px;
                 margin: 0 auto;
             }
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 12px;
-            }
-            .stat {
-                padding: 14px;
-            }
-            .stat-number {
-                font-size: 30px;
-            }
-            .testimonial {
-                padding: 20px;
-            }
-            .faq-question {
-                padding: 14px 18px;
-                font-size: 15px;
-            }
-            .faq-answer {
-                font-size: 14px;
-            }
-            .coverage-img {
-                border-radius: var(--radius-md);
-            }
-            .coverage-img img {
-                aspect-ratio: 4/3;
-                min-height: 120px;
-            }
-            .states-wrap {
-                gap: 8px;
-            }
-            .state {
-                padding: 6px 14px;
-                font-size: 12px;
-            }
-            .network-badges {
-                justify-content: center;
-            }
-            .emergency-bar {
-                font-size: 12px;
-                padding: 8px 16px;
-                gap: 6px;
-            }
-            .section-pad {
-                padding: 56px 0;
-            }
-            .container {
-                padding: 0 16px;
-            }
-            .footer-links .sep {
-                display: none;
-            }
-            .footer-links {
-                gap: 6px 14px;
-            }
-        }
-
-        @media (max-width: 400px) {
-            .hero h1 {
-                font-size: 28px;
-            }
-            .header-inner {
-                padding: 0 12px;
-                height: 60px;
-            }
-            .logo {
-                font-size: 16px;
-                gap: 6px;
-            }
-            .logo-icon {
-                width: 32px;
-                height: 32px;
-                font-size: 14px;
-            }
-            .btn-primary {
-                padding: 14px 24px;
-                font-size: 15px;
-                min-height: 48px;
-            }
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+            .stat { padding: 14px; }
+            .stat-number { font-size: 30px; }
+            .testimonial { padding: 20px; }
+            .faq-question { padding: 14px 18px; font-size: 15px; }
+            .faq-answer { font-size: 14px; }
+            .coverage-img { border-radius: var(--radius-md); }
+            .coverage-img img { aspect-ratio: 4/3; min-height: 120px; }
+            .states-wrap { gap: 8px; }
+            .state { padding: 6px 14px; font-size: 12px; }
+            .network-badges { justify-content: center; }
+            .emergency-bar { font-size: 12px; padding: 8px 16px; gap: 6px; }
+            .section-pad { padding: 56px 0; }
+            .container { padding: 0 16px; }
+            .footer-links .sep { display: none; }
+            .footer-links { gap: 6px 14px; }
         }
     </style>
+<base target="_blank">
 </head>
-
 <body>
 
     <!-- ========== HEADER ========== -->
@@ -1722,11 +1751,17 @@
                 <a href="#how">How It Works</a>
                 <a href="#coverage">Coverage</a>
                 <a href="#faq">FAQ</a>
+            </nav>
+            <div class="nav-actions">
+                <button class="btn-web-call" onclick="initiateBrowserCall()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    Browser Call
+                </button>
                 <a href="tel:+18005550199" class="nav-cta">
                     <span class="dot" aria-hidden="true"></span>
                     1-800-555-0199
                 </a>
-            </nav>
+            </div>
             <button class="mobile-toggle" aria-label="Toggle menu" onclick="toggleMobile()" aria-expanded="false">
                 ☰
             </button>
@@ -1744,6 +1779,10 @@
             <span class="dot" aria-hidden="true"></span>
             Call Now: 1-800-555-0199
         </a>
+        <button class="btn-web-call" style="margin-top: 10px; font-size: 18px; padding: 14px 30px;" onclick="toggleMobile(); initiateBrowserCall();">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            Call from Browser
+        </button>
         <p class="nav-sub">24/7 · Free Quote · Licensed &amp; Insured</p>
     </div>
 
@@ -1758,7 +1797,7 @@
     <!-- ========== HERO ========== -->
     <section class="hero" id="home" aria-labelledby="hero-title">
         <div class="hero-bg">
-            <img src="https://kimi-web-img.moonshot.cn/img/www.socalimoldremediation.com/d0af530ba879371a5799489bf8f7e745b94b26ae" alt="Water damage restoration crew arriving at a flooded home with emergency equipment at sunset" loading="eager" decoding="async" />
+            <img src="https://kimi-web-img.moonshot.cn/img/images.squarespace-cdn.com/d04fb4cbb89b56ea68b69507c49a1a1ed22fc549.jpg" alt="Water damage restoration technicians using industrial pumps to extract flood water from a residential home" loading="eager" decoding="async" />
         </div>
         <div class="hero-overlay"></div>
         <div class="hero-inner">
@@ -1783,9 +1822,10 @@
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                         Call Now — Free Quote
                     </a>
-                    <a href="#services" class="btn-secondary" aria-label="View our water damage services">
-                        Explore Services →
-                    </a>
+                    <button class="btn-web-call-hero" onclick="initiateBrowserCall()" aria-label="Call from browser using WebRTC">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        Call from Browser
+                    </button>
                 </div>
                 <div class="hero-phone-row">
                     <span>📞 Direct:</span>
@@ -1814,10 +1854,10 @@
             </div>
             <div class="hero-img-side">
                 <div class="hero-img-card">
-                    <img src="https://kimi-web-img.moonshot.cn/img/columbia-sc.rytechinc.com/44cfd44d9febe0f8bfc1e1474cbfa33de0f9c795.jpg" alt="Water damage restoration technicians setting up commercial drying equipment in a flooded kitchen" loading="lazy" decoding="async" />
+                    <img src="https://kimi-web-img.moonshot.cn/img/pflugervillewaterdamagepros.com/bf062e2ab89989898be3276ad0354d37a70f646c.webp" alt="Restoration professional arriving at a residential home with water extraction equipment from a service van" loading="lazy" decoding="async" />
                 </div>
                 <div class="hero-img-caption">
-                    <img class="avatar" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&q=80" alt="Emergency dispatcher portrait" loading="lazy" decoding="async" />
+                    <img class="avatar" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Emergency dispatch specialist portrait" loading="lazy" decoding="async" />
                     <div class="info">
                         <h4>Emergency Dispatcher</h4>
                         <p>Live — Standing By Now</p>
@@ -1860,7 +1900,7 @@
             <div class="services-grid">
                 <article class="service-card reveal reveal-delay-1">
                     <div class="img-wrap">
-                        <img src="https://kimi-web-img.moonshot.cn/img/waterdamage.cc/ad46b496ca4eb18e0770efa98b897f9f47b678f9.jpg" alt="Water damage technician using a wet vacuum to extract standing water from a flooded living room floor" loading="lazy" decoding="async" />
+                        <img src="https://kimi-web-img.moonshot.cn/img/24hourfloodfighters.com/b3234194a65f0ea10624c4f8af8b053ef15d8627.jpg" alt="Water damage restoration technician using a commercial wet vacuum to extract standing water from a flooded home interior" loading="lazy" decoding="async" />
                         <span class="overlay-tag">Emergency Extraction</span>
                     </div>
                     <div class="service-body">
@@ -1876,7 +1916,7 @@
                 </article>
                 <article class="service-card reveal reveal-delay-2">
                     <div class="img-wrap">
-                        <img src="https://kimi-web-img.moonshot.cn/img/advanceddri.com/01777a59c562f4a1bbee9a2f6cb1c4771632cb88.webp" alt="Flooded living room with furniture during professional water damage cleanup and restoration" loading="lazy" decoding="async" />
+                        <img src="https://kimi-web-img.moonshot.cn/img/waterextractionexperts.com/d3dfcb0f26a655e9c518c56070777f06b4e69298.jpg" alt="Severely flooded basement with standing water, damaged ceiling tiles, and debris requiring emergency water extraction" loading="lazy" decoding="async" />
                         <span class="overlay-tag">Flood Cleanup</span>
                     </div>
                     <div class="service-body">
@@ -1892,7 +1932,7 @@
                 </article>
                 <article class="service-card reveal reveal-delay-3">
                     <div class="img-wrap">
-                        <img src="https://kimi-web-img.moonshot.cn/img/www.shutterstock.com/a874d3dd723979b506cc54eba9d7d75e72edfea1.jpg" alt="Residential neighborhood flooded after a severe storm with homes and streets submerged in water" loading="lazy" decoding="async" />
+                        <img src="https://kimi-web-img.moonshot.cn/img/www.dumpsters.com/eb84c1ccb52894b3077c12b697db02a6202f3bac.jpg" alt="Flooded residential interior with standing water covering tile floors, reflecting ceiling fixtures and doorways" loading="lazy" decoding="async" />
                         <span class="overlay-tag">Storm Damage</span>
                     </div>
                     <div class="service-body">
@@ -1908,7 +1948,7 @@
                 </article>
                 <article class="service-card reveal reveal-delay-4">
                     <div class="img-wrap">
-                        <img src="https://kimi-web-img.moonshot.cn/img/summitframerestore.com/2bdf8398ed131db21145c2a7fac7db9b104f090a.jpg" alt="Commercial grade air movers and dehumidifiers drying a carpeted room after water damage" loading="lazy" decoding="async" />
+                        <img src="https://kimi-web-img.moonshot.cn/img/rytechinc.com/ede6e2f1399087bf7c7c4fd0f0bb73fc4152f179.jpg" alt="Multiple industrial air movers and dehumidifiers set up in a room for structural drying after water damage extraction" loading="lazy" decoding="async" />
                         <span class="overlay-tag">Structural Drying</span>
                     </div>
                     <div class="service-body">
@@ -1924,7 +1964,7 @@
                 </article>
                 <article class="service-card reveal reveal-delay-5">
                     <div class="img-wrap">
-                        <img src="https://kimi-web-img.moonshot.cn/img/media.fluke.com/283190fdf05b5838a36e2ec84bf639fa4ba4cf69.jpg" alt="Technician using an infrared thermal camera to detect hidden moisture and water damage behind walls" loading="lazy" decoding="async" />
+                        <img src="https://kimi-web-img.moonshot.cn/img/aircareenvironmental.com/c5fbb472c32350b03d8ce19e3164bb06d9b94a8e.webp" alt="Mold remediation technician in full white protective suit and respirator treating mold growth on interior walls" loading="lazy" decoding="async" />
                         <span class="overlay-tag">Mold Prevention</span>
                     </div>
                     <div class="service-body">
@@ -1938,6 +1978,22 @@
                         </ul>
                     </div>
                 </article>
+                <article class="service-card reveal reveal-delay-5">
+                    <div class="img-wrap">
+                        <img src="https://kimi-web-img.moonshot.cn/img/reliablebrooklynwaterdamagerestoration.com/a349327d56c27e9c94f6a5c1232564a8e8300f6b.jpg" alt="Water damage restoration professional in hard hat inspecting ceiling water stains and damage with moisture detection tools" loading="lazy" decoding="async" />
+                        <span class="overlay-tag">Insurance Help</span>
+                    </div>
+                    <div class="service-body">
+                        <h3>Insurance Claim Assistance</h3>
+                        <p>Navigating insurance claims can be stressful. We work directly with your insurance company, documenting all damage to ensure you get maximum coverage.</p>
+                        <ul class="service-list">
+                            <li><span class="check" aria-hidden="true">✓</span> Direct insurance billing</li>
+                            <li><span class="check" aria-hidden="true">✓</span> Detailed damage documentation</li>
+                            <li><span class="check" aria-hidden="true">✓</span> Claim filing assistance</li>
+                            <li><span class="check" aria-hidden="true">✓</span> Adjuster coordination</li>
+                        </ul>
+                    </div>
+                </article>
             </div>
         </div>
     </section>
@@ -1945,7 +2001,7 @@
     <!-- ========== HOW IT WORKS ========== -->
     <section class="section-pad" id="how" aria-labelledby="how-title">
         <div class="container">
-            <div class="section-header dark reveal">
+            <div class="section-header reveal">
                 <span class="section-label">The Process</span>
                 <h2 id="how-title">From Crisis to Cleanup in Minutes</h2>
                 <p>No forms. No waiting. Just a live voice and fast action. Here's how we get you water damage help fast.</p>
@@ -2008,7 +2064,7 @@
     <section class="section-pad" id="network" aria-labelledby="network-title">
         <div class="container network-inner">
             <div class="network-img reveal">
-                <img src="https://kimi-web-img.moonshot.cn/img/lirp.cdn-website.com/4414897162ed8e16f82997de67bfd3bcac21ab5a.jpg" alt="Restoration professional inspecting water-damaged ceiling and structural integrity after a leak" loading="lazy" decoding="async" />
+                <img src="https://kimi-web-img.moonshot.cn/img/columbia-sc.rytechinc.com/44cfd44d9febe0f8bfc1e1474cbfa33de0f9c795.jpg" alt="Water damage restoration professional in hard hat inspecting ceiling water stains and damage with moisture detection tools" loading="lazy" decoding="async" />
             </div>
             <div class="network-content reveal">
                 <span class="section-label" style="text-align:left;">Our Network</span>
@@ -2046,7 +2102,7 @@
                 <p>We prioritize high-demand states where water damage emergencies hit hardest. Our network reaches you wherever disaster strikes.</p>
             </div>
             <div class="coverage-img reveal">
-                <img src="https://kimi-web-img.moonshot.cn/img/i.abcnewsfe.com/b2368bb7340657f2ec1e45f8c3ce1d582f040ce7.jpg" alt="Aerial view of a flooded residential neighborhood showing the scale of storm water damage across multiple homes" loading="lazy" decoding="async" />
+                <img src="https://kimi-web-img.moonshot.cn/img/caliwaterfire.com/ec0798f4dcb258a1401d55b3866f90b68c93c26c.jpg" alt="Multiple water damage restoration service vans parked at a residential neighborhood ready for emergency response" loading="lazy" decoding="async" />
                 <div class="coverage-overlay">
                     <span class="tag">🇺🇸 <strong>Nationwide</strong> · 24/7/365</span>
                     <span class="tag">📞 <span class="hl">1-800-555-0199</span></span>
@@ -2088,7 +2144,7 @@
     <!-- ========== TESTIMONIALS ========== -->
     <section class="section-pad" id="testimonials" aria-labelledby="testimonials-title">
         <div class="container">
-            <div class="section-header dark reveal">
+            <div class="section-header reveal">
                 <span class="section-label">Testimonials</span>
                 <h2 id="testimonials-title">Real Homeowners, Real Relief</h2>
                 <p>When water damage strikes, seconds matter. Here's what homeowners say about calling HomeConnector.</p>
@@ -2104,7 +2160,7 @@
                     </div>
                     <blockquote>"My basement was flooding at 2 AM from a burst pipe. I tapped the ad, entered my zip, and a live agent picked up in 6 seconds. A water extraction crew was at my door in 45 minutes. Unbelievable."</blockquote>
                     <div class="testimonial-author">
-                        <img src="https://kimi-web-img.moonshot.cn/img/houseandhome.com/0ba51d083af9ea17ac5564f61949ed1ae2f37944.jpg" alt="Harry M. and his family relaxing in their restored living room after water damage repair" loading="lazy" decoding="async" />
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Harry M. and his family relaxing in their restored living room after water damage repair" loading="lazy" decoding="async" />
                         <div>
                             <h5>Harry M.</h5>
                             <span>Homeowner, Baton Rouge, LA</span>
@@ -2121,7 +2177,7 @@
                     </div>
                     <blockquote>"I manage 12 rental units. When a tenant called about water pouring through the ceiling during a storm, HomeConnector had a restoration crew dispatched before I even finished the phone call."</blockquote>
                     <div class="testimonial-author">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" alt="Paula R., property manager, smiling portrait" loading="lazy" decoding="async" />
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Paula R., property manager, smiling portrait" loading="lazy" decoding="async" />
                         <div>
                             <h5>Paula R.</h5>
                             <span>Property Manager, Tampa, FL</span>
@@ -2238,7 +2294,7 @@
     <!-- ========== CTA ========== -->
     <section class="cta-section" aria-labelledby="cta-title">
         <div class="cta-bg">
-            <img src="https://kimi-web-img.moonshot.cn/img/wasatch-front.pauldavis.com/f008be8a944020de1502a82a4ddc786da2ddce41.png" alt="Emergency restoration crew unloading commercial drying equipment from a service van arriving at a residence" loading="lazy" decoding="async" />
+            <img src="https://kimi-web-img.moonshot.cn/img/waterdamagerecovery.net/910a155677eaa825cf7d8e88366b50d515bfbfec.png" alt="Large water damage restoration team posing with service vans, ready for nationwide emergency dispatch" loading="lazy" decoding="async" />
         </div>
         <div class="cta-overlay"></div>
         <div class="cta-inner reveal">
@@ -2258,7 +2314,7 @@
             <div class="footer-brand">
                 <span style="font-size:18px;">💧</span>
                 HomeConnector<span class="dot">·</span>
-                <span style="font-weight:400;color:var(--text-muted);font-size:13px;">Licensed &amp; Insured</span>
+                <span style="font-weight:400;color:#94a3b8;font-size:13px;">Licensed &amp; Insured</span>
             </div>
             <div class="footer-links">
                 <a href="#">Privacy</a>
@@ -2267,10 +2323,10 @@
                 <span class="sep">|</span>
                 <a href="#">Licenses</a>
                 <span class="sep">|</span>
-                <a href="tel:+18005550199" style="color:var(--accent-gold);font-weight:600;">1-800-555-0199</a>
+                <a href="tel:+18005550199" style="color:var(--accent-blue-light);font-weight:600;">1-800-555-0199</a>
             </div>
             <div class="footer-copy">
-                © 2026 · <strong>HomeConnector</strong> · <span class="accent">Nationwide</span> 24/7/365
+                © 2024 · <strong>HomeConnector</strong> · <span class="accent">Nationwide</span> 24/7/365
             </div>
         </div>
     </footer>
@@ -2284,10 +2340,34 @@
             <span style="color:var(--text-muted);font-size:12px;">|</span>
             <span style="font-size:12px;">📞 <strong>Nationwide</strong> · 24/7/365</span>
         </div>
-        <a href="tel:+18005550199" class="btn-primary" aria-label="Call now for emergency water damage help">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            Call Now — Free Quote
-        </a>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button class="btn-web-call-floating" onclick="initiateBrowserCall()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                Browser Call
+            </button>
+            <a href="tel:+18005550199" class="btn-primary" aria-label="Call now for emergency water damage help">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                Call Now
+            </a>
+        </div>
+    </div>
+
+    <!-- ========== WEBRTC CALL MODAL ========== -->
+    <div class="call-modal" id="callModal" role="dialog" aria-modal="true" aria-labelledby="callTarget">
+        <div class="call-modal-content">
+            <button class="call-close-btn" onclick="endBrowserCall()" aria-label="Close call dialog">✕</button>
+            <div class="call-avatar">💧</div>
+            <div class="call-status" id="callStatus">Connecting...</div>
+            <div class="call-target" id="callTarget">HomeConnector Dispatch</div>
+            <div class="call-controls">
+                <button class="call-control-btn" id="muteBtn" onclick="toggleMute()" aria-label="Mute call">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+                </button>
+                <button class="call-control-btn end-call" onclick="endBrowserCall()" aria-label="End call">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(135deg);"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- ========== SCRIPTS ========== -->
@@ -2395,6 +2475,140 @@
                 if (btn) btn.setAttribute('aria-expanded', 'true');
             }
         });
+
+        // --- WebRTC / Twilio Click-to-Call Implementation ---
+        const USE_REAL_WEBRTC = false; // Set to 'true' when backend token endpoint is ready
+        const TOKEN_ENDPOINT = '/api/twilio-token'; // Your backend endpoint generating Twilio JWT
+        const TARGET_PHONE = '+18005550199'; // The number to dial
+        
+        let twilioDevice = null;
+        let activeCall = null;
+        let isMuted = false;
+        let callSimulationInterval = null;
+
+        const callModal = document.getElementById('callModal');
+        const callStatusEl = document.getElementById('callStatus');
+        const muteBtn = document.getElementById('muteBtn');
+
+        async function initiateBrowserCall() {
+            // Open modal immediately for instant feedback
+            callModal.classList.add('active');
+            callStatusEl.textContent = 'Connecting...';
+            document.body.style.overflow = 'hidden';
+            
+            try {
+                if (USE_REAL_WEBRTC) {
+                    // --- REAL TWILIO IMPLEMENTATION ---
+                    
+                    // 1. Request microphone permissions early
+                    await navigator.mediaDevices.getUserMedia({ audio: true });
+                    
+                    // 2. Fetch Twilio Access Token from your backend
+                    const response = await fetch(TOKEN_ENDPOINT);
+                    if (!response.ok) throw new Error('Failed to fetch token');
+                    const data = await response.json();
+                    const token = data.token;
+                    
+                    // 3. Setup Twilio Device
+                    twilioDevice = new Twilio.Device(token, { debug: false });
+                    
+                    twilioDevice.on('ready', (device) => {
+                        callStatusEl.textContent = 'Ringing...';
+                        callModal.classList.add('ringing');
+                        // 4. Connect the call to the target phone number
+                        activeCall = device.connect({ To: TARGET_PHONE });
+                        
+                        activeCall.on('accept', (call) => {
+                            callStatusEl.textContent = 'Connected';
+                            callModal.classList.remove('ringing');
+                        });
+                        
+                        activeCall.on('disconnect', (call) => {
+                            endBrowserCall();
+                        });
+                        
+                        activeCall.on('error', (err) => {
+                            console.error('Call error:', err);
+                            callStatusEl.textContent = 'Call Failed. Try again.';
+                            setTimeout(endBrowserCall, 2000);
+                        });
+                    });
+                    
+                    twilioDevice.on('error', (err) => {
+                        console.error('Twilio Device Error:', err);
+                        callStatusEl.textContent = 'Connection Error';
+                        setTimeout(endBrowserCall, 2000);
+                    });
+
+                } else {
+                    // --- SIMULATED WEBRTC CALL (For UI Demo) ---
+                    console.warn('WebRTC running in Simulation Mode. Set USE_REAL_WEBRTC = true for live calls.');
+                    
+                    callStatusEl.textContent = 'Requesting Mic Access...';
+                    // Simulate mic permission delay
+                    await new Promise(resolve => setTimeout(resolve, 800));
+                    
+                    callStatusEl.textContent = 'Connecting...';
+                    await new Promise(resolve => setTimeout(resolve, 1200));
+                    
+                    callModal.classList.add('ringing');
+                    callStatusEl.textContent = 'Ringing...';
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    
+                    callModal.classList.remove('ringing');
+                    callStatusEl.textContent = 'Connected - Live Agent';
+                    
+                    // Simulate call timer
+                    let seconds = 0;
+                    callSimulationInterval = setInterval(() => {
+                        seconds++;
+                        const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+                        const secs = (seconds % 60).toString().padStart(2, '0');
+                        callStatusEl.textContent = `Connected - ${mins}:${secs}`;
+                    }, 1000);
+                }
+            } catch (error) {
+                console.error('Call initialization failed:', error);
+                callStatusEl.textContent = 'Mic Access Denied or Error';
+                setTimeout(endBrowserCall, 2500);
+            }
+        }
+
+        function endBrowserCall() {
+            if (USE_REAL_WEBRTC && activeCall) {
+                activeCall.disconnect();
+            }
+            if (USE_REAL_WEBRTC && twilioDevice) {
+                twilioDevice.destroy();
+                twilioDevice = null;
+            }
+            if (callSimulationInterval) {
+                clearInterval(callSimulationInterval);
+                callSimulationInterval = null;
+            }
+            
+            callModal.classList.remove('active', 'ringing');
+            document.body.style.overflow = '';
+            
+            // Reset mute state
+            isMuted = false;
+            muteBtn.classList.remove('muted');
+        }
+
+        function toggleMute() {
+            if (USE_REAL_WEBRTC && activeCall) {
+                isMuted = !activeCall.isMuted();
+                activeCall.mute(!isMuted);
+            } else {
+                isMuted = !isMuted;
+            }
+            
+            if (isMuted) {
+                muteBtn.classList.add('muted');
+            } else {
+                muteBtn.classList.remove('muted');
+            }
+        }
     </script>
 
 </body>
