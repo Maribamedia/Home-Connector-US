@@ -14,14 +14,11 @@ export async function onRequestGet(context) {
 
     try {
         const response = await fetch(ringbaUrl);
-        
-        // Ringba might return a 204 No Content if no buyers are available
         if (response.status === 204) {
             return new Response(JSON.stringify({ number: null }), { 
                 headers: { 'Content-Type': 'application/json' } 
             });
         }
-
         const data = await response.json();
         return new Response(JSON.stringify(data), { 
             headers: { 'Content-Type': 'application/json' } 
