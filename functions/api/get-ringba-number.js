@@ -10,10 +10,13 @@ export async function onRequestGet(context) {
     }
 
     const ringbaSegmentId = 'c12ade49474d4310add3acec851fbb45';
-    // Ringba RTB requires a POST to the /bid endpoint
     const ringbaUrl = `https://rtb.ringba.com/v1/segments/${ringbaSegmentId}/bid`;
 
-    // Standard OpenRTB 2.5 Payload for Ringba
+    // Extract the user's real IP and User-Agent from the incoming browser request
+    const clientIp = request.headers.get('cf-connecting-ip') || '127.0.0.1';
+    const userAgent = request.headers.get('user-agent') || 'Mozilla/5.0';
+
+    // Standard OpenRTB 2.5 Payload
     const rtbPayload = {
         id: "homeconnector-" + Date.now(),
         imp: [
@@ -25,7 +28,14 @@ export async function onRequestGet(context) {
                     }
                 }
             }
-        ]
+        ],
+        device: {
+            ip: clientIp,
+            ua: userAgent,
+            geo: {
+                zip: zip
+            }
+        }
     };
 
     try {
@@ -42,7 +52,7 @@ export async function onRequestGet(context) {
 
         // If Ringba returns no content (204) or empty text, return null
         if (response.status === 204 || !responseText) {
-            return new Response(JSON.stringify({ number: null }), { 
+            return new Response(JSON.stringify({ number: null, reason: "No buyers available for this IP/Zip" }), { 
                 headers: { 'Content-Type': 'application/json' } 
             });
         }
@@ -58,6 +68,11 @@ export async function onRequestGet(context) {
                         for (const bid of seat.bid) {
                             if (bid.phone) {
                                 phoneNumber = bid.phone;
+                                break;
+                            }
+                            // Check common Ringba ext phone placements
+                            if (bid.ext && bid.ext.phone) {
+                                phoneNumber = bid.ext.phone;
                                 break;
                             }
                         }
