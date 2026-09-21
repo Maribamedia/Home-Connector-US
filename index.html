@@ -21,11 +21,14 @@
 
     <meta name="keywords" content="emergency water damage, active leak, burst pipe, flooding, sewage backup, water heater burst, ceiling collapse, mold prevention, 24/7 water damage, local water damage pros" />
 
+    <!-- Fonts: preconnect + non-blocking stylesheet -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" /></noscript>
 
-    <script src="https://cdn.jsdelivr.net/npm/@twilio/voice-sdk@2.1.1/dist/twilio-voice.min.js"></script>
+    <!-- Twilio Voice SDK is now lazy-loaded on demand (see loadTwilioSDK) -->
 
     <script type="application/ld+json">
         {
@@ -112,6 +115,8 @@
         }
 
         :root {
+            --header-h: 70px;
+
             --bg-primary: #ffffff;
             --bg-secondary: #f8fafc;
             --bg-card: #ffffff;
@@ -142,7 +147,7 @@
             --gradient-navy: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             --gradient-card: linear-gradient(145deg, #ffffff, #f8fafc);
 
-            --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             --radius-sm: 8px;
             --radius-md: 14px;
             --radius-lg: 20px;
@@ -158,9 +163,12 @@
 
         html {
             scroll-behavior: smooth;
+            scroll-padding-top: calc(var(--header-h) + 16px);
             font-size: 16px;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
         }
 
         body {
@@ -169,6 +177,8 @@
             color: var(--text-primary);
             line-height: 1.6;
             overflow-x: hidden;
+            overflow-x: clip;
+            -webkit-tap-highlight-color: transparent;
         }
 
         img { max-width: 100%; display: block; }
@@ -202,15 +212,17 @@
             padding: clamp(64px, 10vh, 120px) 0;
         }
 
-        /* --- Reveal Animations --- */
+        /* --- Reveal Animations (GPU-friendly) --- */
         .reveal {
             opacity: 0;
-            transform: translateY(40px);
+            transform: translate3d(0, 40px, 0);
             transition: opacity 0.8s ease, transform 0.8s ease;
+            will-change: opacity, transform;
         }
         .reveal.visible {
             opacity: 1;
-            transform: translateY(0);
+            transform: translate3d(0, 0, 0);
+            will-change: auto;
         }
         .reveal-delay-1 { transition-delay: 0.08s; }
         .reveal-delay-2 { transition-delay: 0.16s; }
@@ -230,7 +242,7 @@
             border-radius: var(--radius-md);
             font-weight: 800;
             font-size: clamp(16px, 1.1vw, 20px);
-            transition: all var(--transition);
+            transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
             box-shadow: var(--shadow-btn);
             min-height: 56px;
             min-width: 48px;
@@ -257,7 +269,7 @@
             font-weight: 700;
             font-size: clamp(14px, 0.95vw, 18px);
             border: 1px solid var(--bg-navy);
-            transition: all var(--transition);
+            transition: background var(--transition), transform var(--transition);
             min-height: 52px;
             min-width: 44px;
             touch-action: manipulation;
@@ -284,7 +296,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            height: 70px;
+            height: var(--header-h);
             padding: 0 20px;
             max-width: 1200px;
             margin: 0 auto;
@@ -364,7 +376,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            transition: all var(--transition);
+            transition: background var(--transition), transform var(--transition);
             cursor: pointer;
         }
         .btn-web-call:hover {
@@ -382,7 +394,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            transition: all var(--transition);
+            transition: transform var(--transition), box-shadow var(--transition);
             border: 1px solid rgba(255, 255, 255, 0.10);
         }
         .nav .nav-cta::after { display: none; }
@@ -509,7 +521,7 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             position: relative;
             z-index: 1;
-            margin-top: 70px;
+            margin-top: var(--header-h);
         }
         .emergency-bar .pulse-ring {
             display: inline-block;
@@ -532,13 +544,15 @@
         /* --- Hero --- */
         .hero {
             position: relative;
-            min-height: calc(100vh - 70px);
+            min-height: calc(100vh - var(--header-h));
+            min-height: calc(100dvh - var(--header-h));
             display: flex;
             align-items: center;
             padding: 60px 20px 80px;
             overflow: hidden;
             background: var(--bg-primary);
         }
+        /* Decorative split panel — CSS background keeps it off mobile downloads */
         .hero-bg {
             position: absolute;
             top: 0;
@@ -547,12 +561,12 @@
             height: 100%;
             z-index: 0;
             clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
-        }
-        .hero-bg img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: brightness(0.5);
+            background-image:
+                linear-gradient(rgba(15, 23, 42, 0.5), rgba(15, 23, 42, 0.5)),
+                url('https://kimi-web-img.moonshot.cn/img/images.squarespace-cdn.com/d04fb4cbb89b56ea68b69507c49a1a1ed22fc549.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
         .hero-overlay {
             position: absolute;
@@ -608,6 +622,7 @@
             line-height: 1.04;
             color: var(--bg-navy);
             letter-spacing: -1.5px;
+            text-wrap: balance;
         }
         .hero h1 .highlight {
             color: var(--accent-blue);
@@ -641,7 +656,7 @@
             border-radius: var(--radius-md);
             font-weight: 800;
             font-size: clamp(16px, 1.1vw, 20px);
-            transition: all var(--transition);
+            transition: transform var(--transition), background var(--transition);
             box-shadow: 0 6px 20px rgba(15, 23, 42, 0.2);
             min-height: 56px;
             touch-action: manipulation;
@@ -798,6 +813,7 @@
             padding: 14px 0;
             overflow: hidden;
             position: relative;
+            contain: content;
         }
         .marquee-track {
             display: flex;
@@ -822,8 +838,8 @@
             flex-shrink: 0;
         }
         @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-50%, 0, 0); }
         }
 
         /* --- Section Headers --- */
@@ -850,6 +866,7 @@
             line-height: 1.1;
             margin-bottom: 12px;
             color: var(--bg-navy);
+            text-wrap: balance;
         }
         .section-header p {
             font-size: clamp(16px, 1.05vw, 19px);
@@ -871,7 +888,7 @@
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-lg);
             overflow: hidden;
-            transition: all var(--transition);
+            transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
             display: flex;
             flex-direction: column;
             box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
@@ -898,6 +915,7 @@
             left: 16px;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             padding: 4px 14px;
             border-radius: 50px;
             font-size: 11px;
@@ -972,8 +990,7 @@
             border-radius: var(--radius-lg);
             padding: 32px 24px;
             text-align: center;
-            transition: all var(--transition);
-            backdrop-filter: blur(4px);
+            transition: transform var(--transition), border-color var(--transition), background var(--transition);
         }
         .step:hover {
             border-color: var(--accent-blue-light);
@@ -1019,7 +1036,7 @@
             background: var(--bg-secondary);
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-md);
-            transition: all var(--transition);
+            transition: transform var(--transition), border-color var(--transition), background var(--transition), box-shadow var(--transition);
         }
         .stat:hover {
             border-color: var(--accent-blue-light);
@@ -1093,7 +1110,7 @@
             font-size: 14px;
             font-weight: 600;
             color: var(--text-primary);
-            transition: all var(--transition);
+            transition: border-color var(--transition), color var(--transition);
         }
         .badge:hover {
             border-color: var(--accent-blue-light);
@@ -1156,6 +1173,7 @@
         .coverage-overlay .tag {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             padding: 8px 20px;
             border-radius: 50px;
             font-size: 13px;
@@ -1178,7 +1196,7 @@
             font-size: 13px;
             font-weight: 500;
             color: var(--text-secondary);
-            transition: all var(--transition);
+            transition: background var(--transition), color var(--transition), transform var(--transition), border-color var(--transition);
         }
         .state:hover {
             background: var(--accent-sky);
@@ -1284,7 +1302,7 @@
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-lg);
             padding: 32px;
-            transition: all var(--transition);
+            transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
             box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
         }
         .testimonial:hover {
@@ -1346,7 +1364,7 @@
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-md);
             overflow: hidden;
-            transition: all var(--transition);
+            transition: background var(--transition), border-color var(--transition), box-shadow var(--transition);
         }
         .faq-item:hover { border-color: var(--accent-blue-light); }
         .faq-item.open { background: #ffffff; box-shadow: var(--shadow-card); }
@@ -1373,7 +1391,7 @@
         .faq-question:hover { background: rgba(37, 99, 235, 0.05); }
         .faq-question .icon {
             font-size: 14px;
-            transition: transform var(--transition);
+            transition: transform var(--transition), background var(--transition), color var(--transition);
             flex-shrink: 0;
             color: var(--accent-blue);
             width: 24px;
@@ -1440,6 +1458,7 @@
             color: #ffffff;
             letter-spacing: -1px;
             margin-bottom: 12px;
+            text-wrap: balance;
         }
         .cta-inner p {
             font-size: clamp(16px, 1.05vw, 20px);
@@ -1513,6 +1532,15 @@
             font-weight: 600;
         }
         .footer-copy .accent { color: var(--accent-blue-light); }
+        .footer-disclaimer {
+            max-width: 1200px;
+            margin: 16px auto 0;
+            text-align: center;
+            font-size: 11px;
+            color: #475569;
+            line-height: 1.6;
+            padding: 0 16px;
+        }
 
         /* --- Floating Bar --- */
         .floating-bar {
@@ -1531,11 +1559,11 @@
             justify-content: space-between;
             gap: 16px;
             flex-wrap: wrap;
-            transform: translateY(100%);
+            transform: translate3d(0, 100%, 0);
             transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             box-shadow: 0 -10px 30px rgba(15, 23, 42, 0.08);
         }
-        .floating-bar.visible { transform: translateY(0); }
+        .floating-bar.visible { transform: translate3d(0, 0, 0); }
         .floating-bar .info {
             display: flex;
             align-items: center;
@@ -1575,12 +1603,14 @@
             z-index: 2000;
             background: rgba(15, 23, 42, 0.8);
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease;
+            padding: 16px;
         }
         .call-modal.active {
             opacity: 1;
@@ -1617,7 +1647,7 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            transition: all var(--transition);
+            transition: background var(--transition), color var(--transition);
         }
         .call-close-btn:hover {
             background: var(--bg-navy);
@@ -1683,7 +1713,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all var(--transition);
+            transition: background var(--transition), color var(--transition), transform var(--transition);
         }
         .call-control-btn:hover {
             background: var(--bg-navy);
@@ -1704,7 +1734,16 @@
             border-color: var(--accent-blue);
         }
 
-        /* --- Responsive --- */
+        /* =========================================
+           RESPONSIVE
+           ========================================= */
+
+        @media (max-width: 1200px) {
+            .container { padding: 0 20px; }
+            .hero-inner { gap: 44px; }
+            .network-inner { gap: 44px; }
+        }
+
         @media (max-width: 1024px) {
             .hero-bg, .hero-overlay { display: none; }
             .hero-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
@@ -1765,12 +1804,29 @@
             }
             .footer-links { justify-content: center; }
             .footer-copy { text-align: center; }
+            .footer { padding-bottom: 100px; }
+        }
+
+        @media (max-width: 768px) {
+            :root { --header-h: 64px; }
+            .header-inner { padding: 0 16px; }
+            .logo { font-size: 17px; }
+            .logo-icon { width: 34px; height: 34px; font-size: 15px; }
+            .section-header { margin-bottom: 36px; }
+            .steps-grid { gap: 14px; }
+            .step { padding: 26px 18px; }
+            .network-badges { justify-content: center; }
+            .network-creds { justify-content: center; }
+            .network-content { text-align: center; }
+            .network-content .section-label { text-align: center; }
         }
 
         @media (max-width: 640px) {
-            .hero { padding: 40px 16px 60px; }
+            :root { --header-h: 62px; }
+            .hero { padding: 40px 16px 60px; min-height: auto; }
             .hero h1 { font-size: 32px; letter-spacing: -0.5px; }
-            .hero-cta-group .btn-primary, .hero-cta-group .btn-web-call-hero { width: 100%; justify-content: center; }
+            .hero-cta-group .btn-primary,
+            .hero-cta-group .btn-web-call-hero { width: 100%; justify-content: center; }
             .hero-zip-wrap {
                 flex-direction: column;
                 width: 100%;
@@ -1813,6 +1869,58 @@
             .container { padding: 0 16px; }
             .footer-links .sep { display: none; }
             .footer-links { gap: 6px 14px; }
+            .zip-checker-input { flex-direction: column; }
+            .zip-checker-input input,
+            .zip-checker-input button { width: 100%; justify-content: center; }
+            .cta-inner .btn-primary { width: 100%; padding: 18px 24px; }
+            .call-modal-content { padding: 36px 24px; }
+            .call-target { font-size: 19px; }
+        }
+
+        @media (max-width: 400px) {
+            .hero h1 { font-size: 28px; }
+            .hero-badge { font-size: 11px; padding: 6px 14px; }
+            .stat-number { font-size: 26px; }
+            .stat-label { font-size: 12px; }
+            .testimonial blockquote { font-size: 14px; }
+        }
+
+        /* Reduce costly blur effects on small / low-power devices */
+        @media (max-width: 640px), (prefers-reduced-transparency: reduce) {
+            .header,
+            .floating-bar,
+            .mobile-nav,
+            .call-modal {
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
+                background: #ffffff;
+            }
+            .call-modal { background: rgba(15, 23, 42, 0.95); }
+            .service-card .img-wrap .overlay-tag,
+            .coverage-overlay .tag {
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
+                background: rgba(255, 255, 255, 0.98);
+            }
+            .coverage-overlay .tag { background: rgba(15, 23, 42, 0.75); }
+        }
+
+        /* Respect reduced motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.001ms !important;
+                scroll-behavior: auto !important;
+            }
+            .reveal {
+                opacity: 1;
+                transform: none;
+            }
+            .marquee-track { animation: none; }
         }
     </style>
     <base target="_blank">
@@ -1838,7 +1946,7 @@
                     Call Now - Free Quote
                 </button>
             </div>
-            <button class="mobile-toggle" aria-label="Toggle menu" onclick="toggleMobile()" aria-expanded="false">
+            <button class="mobile-toggle" aria-label="Toggle menu" aria-expanded="false" onclick="toggleMobile()">
                 ☰
             </button>
         </div>
@@ -1868,10 +1976,8 @@
 
     <!-- ========== HERO ========== -->
     <section class="hero" id="home" aria-labelledby="hero-title">
-        <div class="hero-bg">
-            <img src="https://kimi-web-img.moonshot.cn/img/images.squarespace-cdn.com/d04fb4cbb89b56ea68b69507c49a1a1ed22fc549.jpg" alt="Emergency water damage technician extracting standing water from a flooded residential home" loading="eager" decoding="async" />
-        </div>
-        <div class="hero-overlay"></div>
+        <div class="hero-bg" aria-hidden="true"></div>
+        <div class="hero-overlay" aria-hidden="true"></div>
         <div class="hero-inner">
             <div class="hero-content">
                 <div class="hero-badge">
@@ -1896,7 +2002,7 @@
                     </button>
                 </div>
                 <div class="hero-zip-wrap">
-                    <input type="text" id="zipInput" placeholder="Enter Zip Code" maxlength="5" inputmode="numeric" aria-label="Zip Code" />
+                    <input type="text" id="zipInput" placeholder="Enter Zip Code" maxlength="5" inputmode="numeric" autocomplete="postal-code" aria-label="Zip Code" />
                     <button class="btn-web-call-hero" id="zipSubmitBtn" onclick="fetchRingbaNumber()">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                         Find Local Crew
@@ -1929,10 +2035,10 @@
             </div>
             <div class="hero-img-side">
                 <div class="hero-img-card">
-                    <img src="https://kimi-web-img.moonshot.cn/img/pflugervillewaterdamagepros.com/bf062e2ab89989898be3276ad0354d37a70f646c.webp" alt="Emergency restoration professional arriving at a home with water extraction equipment" loading="lazy" decoding="async" />
+                    <img src="https://kimi-web-img.moonshot.cn/img/pflugervillewaterdamagepros.com/bf062e2ab89989898be3276ad0354d37a70f646c.webp" alt="Emergency restoration professional arriving at a home with water extraction equipment" width="800" height="600" loading="eager" fetchpriority="high" decoding="async" />
                 </div>
                 <div class="hero-img-caption">
-                    <img class="avatar" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Emergency dispatch specialist portrait" loading="lazy" decoding="async" />
+                    <img class="avatar" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Emergency dispatch specialist portrait" width="44" height="44" loading="lazy" decoding="async" />
                     <div class="info">
                         <h4>Emergency Dispatcher</h4>
                         <p>Live — Standing By Now</p>
@@ -1975,7 +2081,7 @@
             <div class="services-grid">
                 <article class="service-card reveal reveal-delay-1">
                     <div class="img-wrap">
-                        <img src="https://kimi-web-img.moonshot.cn/img/24hourfloodfighters.com/b3234194a65f0ea10624c4f8af8b053ef15d8627.jpg" alt="Burst pipe spraying water under a kitchen sink with homeowner on the phone" loading="lazy" decoding="async" />
+                        <img src="https://kimi-web-img.moonshot.cn/img/24hourfloodfighters.com/b3234194a65f0ea10624c4f8af8b053ef15d8627.jpg" alt="Burst pipe spraying water under a kitchen sink with homeowner on the phone" width="600" height="420" loading="lazy" decoding="async" />
                         <span class="overlay-tag">Active Leak</span>
                     </div>
                     <div class="service-body">
@@ -1991,7 +2097,7 @@
                 </article>
                 <article class="service-card reveal reveal-delay-2">
                     <div class="img-wrap">
-                        <img src="https://kimi-web-img.moonshot.cn/img/waterextractionexperts.com/d3dfcb0f26a655e9c518c56070777f06b4e69298.jpg" alt="Flooded interior with standing water and storm damage" loading="lazy" decoding="async" />
+                        <img src="https://kimi-web-img.moonshot.cn/img/waterextractionexperts.com/d3dfcb0f26a655e9c518c56070777f06b4e69298.jpg" alt="Flooded interior with standing water and storm damage" width="600" height="420" loading="lazy" decoding="async" />
                         <span class="overlay-tag">Flooding</span>
                     </div>
                     <div class="service-body">
@@ -2007,7 +2113,7 @@
                 </article>
                 <article class="service-card reveal reveal-delay-3">
                     <div class="img-wrap">
-                        <img src="https://kimi-web-img.moonshot.cn/img/www.dumpsters.com/eb84c1ccb52894b3077c12b697db02a6202f3bac.jpg" alt="Contaminated water and sewage backup in a residential utility room" loading="lazy" decoding="async" />
+                        <img src="https://kimi-web-img.moonshot.cn/img/www.dumpsters.com/eb84c1ccb52894b3077c12b697db02a6202f3bac.jpg" alt="Contaminated water and sewage backup in a residential utility room" width="600" height="420" loading="lazy" decoding="async" />
                         <span class="overlay-tag">Sewage / Cat 3</span>
                     </div>
                     <div class="service-body">
@@ -2023,7 +2129,7 @@
                 </article>
                 <article class="service-card reveal reveal-delay-4">
                     <div class="img-wrap">
-                        <img src="https://kimi-web-img.moonshot.cn/img/rytechinc.com/ede6e2f1399087bf7c7c4fd0f0bb73fc4152f179.jpg" alt="Burst water heater flooding a utility room floor" loading="lazy" decoding="async" />
+                        <img src="https://kimi-web-img.moonshot.cn/img/rytechinc.com/ede6e2f1399087bf7c7c4fd0f0bb73fc4152f179.jpg" alt="Burst water heater flooding a utility room floor" width="600" height="420" loading="lazy" decoding="async" />
                         <span class="overlay-tag">Water Heater</span>
                     </div>
                     <div class="service-body">
@@ -2039,7 +2145,7 @@
                 </article>
                 <article class="service-card reveal reveal-delay-5">
                     <div class="img-wrap">
-                        <img src="https://kimi-web-img.moonshot.cn/img/aircareenvironmental.com/c5fbb472c32350b03d8ce19e3164bb06d9b94a8e.webp" alt="Bulging ceiling with water damage about to collapse" loading="lazy" decoding="async" />
+                        <img src="https://kimi-web-img.moonshot.cn/img/aircareenvironmental.com/c5fbb472c32350b03d8ce19e3164bb06d9b94a8e.webp" alt="Bulging ceiling with water damage about to collapse" width="600" height="420" loading="lazy" decoding="async" />
                         <span class="overlay-tag">Structural Risk</span>
                     </div>
                     <div class="service-body">
@@ -2055,7 +2161,7 @@
                 </article>
                 <article class="service-card reveal reveal-delay-5">
                     <div class="img-wrap">
-                        <img src="https://kimi-web-img.moonshot.cn/img/reliablebrooklynwaterdamagerestoration.com/a349327d56c27e9c94f6a5c1232564a8e8300f6b.jpg" alt="Technician using thermal imaging to detect hidden moisture and prevent mold" loading="lazy" decoding="async" />
+                        <img src="https://kimi-web-img.moonshot.cn/img/reliablebrooklynwaterdamagerestoration.com/a349327d56c27e9c94f6a5c1232564a8e8300f6b.jpg" alt="Technician using thermal imaging to detect hidden moisture and prevent mold" width="600" height="420" loading="lazy" decoding="async" />
                         <span class="overlay-tag">Mold Prevention</span>
                     </div>
                     <div class="service-body">
@@ -2139,7 +2245,7 @@
     <section class="section-pad" id="network" aria-labelledby="network-title">
         <div class="container network-inner">
             <div class="network-img reveal">
-                <img src="https://kimi-web-img.moonshot.cn/img/columbia-sc.rytechinc.com/44cfd44d9febe0f8bfc1e1474cbfa33de0f9c795.jpg" alt="Licensed water damage restoration professional inspecting ceiling damage with moisture detection tools" loading="lazy" decoding="async" />
+                <img src="https://kimi-web-img.moonshot.cn/img/columbia-sc.rytechinc.com/44cfd44d9febe0f8bfc1e1474cbfa33de0f9c795.jpg" alt="Licensed water damage restoration professional inspecting ceiling damage with moisture detection tools" width="800" height="600" loading="lazy" decoding="async" />
             </div>
             <div class="network-content reveal">
                 <span class="section-label" style="text-align:left;">Our Network</span>
@@ -2176,7 +2282,7 @@
                 <h2 id="zip-checker-title">Do We Serve Your ZIP Code?</h2>
                 <p>We target emergency water damage ZIP codes across <strong>AL, AZ, CA, CO, CT, FL, GA, HI, ID, IL, IN, KS, KY, LA, MA, MD, MI, MN, MO, MS, MT, NC, ND, NE, NJ, NV, NY, OH, OK, OR, PA, SC, SD, TN, TX, UT, VA, WA, WI, WY</strong> and more. Enter your ZIP to confirm emergency coverage.</p>
                 <div class="zip-checker-input">
-                    <input type="text" id="coverageZipInput" placeholder="Enter your ZIP code" maxlength="5" inputmode="numeric" aria-label="Enter your ZIP code" />
+                    <input type="text" id="coverageZipInput" placeholder="Enter your ZIP code" maxlength="5" inputmode="numeric" autocomplete="postal-code" aria-label="Enter your ZIP code" />
                     <button class="btn-web-call-hero" type="button" id="coverageZipBtn" onclick="checkCoverageZip()">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                         Check My ZIP
@@ -2196,7 +2302,7 @@
                 <p>We prioritize high-demand states where emergency water damage hits hardest. Our network reaches you wherever disaster strikes.</p>
             </div>
             <div class="coverage-img reveal">
-                <img src="https://kimi-web-img.moonshot.cn/img/caliwaterfire.com/ec0798f4dcb258a1401d55b3866f90b68c93c26c.jpg" alt="Emergency water damage restoration vans ready for dispatch in a residential neighborhood" loading="lazy" decoding="async" />
+                <img src="https://kimi-web-img.moonshot.cn/img/caliwaterfire.com/ec0798f4dcb258a1401d55b3866f90b68c93c26c.jpg" alt="Emergency water damage restoration vans ready for dispatch in a residential neighborhood" width="1200" height="514" loading="lazy" decoding="async" />
                 <div class="coverage-overlay">
                     <span class="tag">🇺🇸 <strong>Nationwide</strong> · 24/7/365</span>
                     <span class="tag">📞 <span class="hl dynamic-phone">Enter Zip</span></span>
@@ -2271,7 +2377,7 @@
                     </div>
                     <blockquote>"My basement was flooding at 2 AM from a burst pipe. I entered my ZIP, called, and a live agent picked up in 6 seconds. A water extraction crew was at my door in 45 minutes. Unbelievable."</blockquote>
                     <div class="testimonial-author">
-                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Harry M. portrait" loading="lazy" decoding="async" />
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Harry M. portrait" width="48" height="48" loading="lazy" decoding="async" />
                         <div>
                             <h5>Harry M.</h5>
                             <span>Homeowner, Baton Rouge, LA</span>
@@ -2288,7 +2394,7 @@
                     </div>
                     <blockquote>"A sewage backup flooded my rental unit. I was told not to touch it. HomeConnector had a contaminated-water specialist on the phone in seconds and a crew dispatched immediately. Lifesaver."</blockquote>
                     <div class="testimonial-author">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Paula R. portrait" loading="lazy" decoding="async" />
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Paula R. portrait" width="48" height="48" loading="lazy" decoding="async" />
                         <div>
                             <h5>Paula R.</h5>
                             <span>Property Manager, Tampa, FL</span>
@@ -2405,7 +2511,7 @@
     <!-- ========== CTA ========== -->
     <section class="cta-section" aria-labelledby="cta-title">
         <div class="cta-bg">
-            <img src="https://kimi-web-img.moonshot.cn/img/waterdamagerecovery.net/910a155677eaa825cf7d8e88366b50d515bfbfec.png" alt="Emergency water damage restoration team ready for nationwide dispatch" loading="lazy" decoding="async" />
+            <img src="https://kimi-web-img.moonshot.cn/img/waterdamagerecovery.net/910a155677eaa825cf7d8e88366b50d515bfbfec.png" alt="Emergency water damage restoration team ready for nationwide dispatch" width="1200" height="800" loading="lazy" decoding="async" />
         </div>
         <div class="cta-overlay"></div>
         <div class="cta-inner reveal">
@@ -2438,7 +2544,7 @@
                 © 2024 · <strong>HomeConnector</strong> · <span class="accent">Nationwide</span> 24/7/365
             </div>
         </div>
-        <div style="max-width:1200px;margin:16px auto 0;text-align:center;font-size:11px;color:#475569;line-height:1.6;padding:0 16px;">
+        <div class="footer-disclaimer">
             HomeConnector is a connection service, not a restoration contractor. We match homeowners with licensed local providers. Availability varies by ZIP code. For active gas, electrical, or structural emergencies, call 911 or your utility provider immediately.
         </div>
     </footer>
@@ -2487,35 +2593,47 @@
         const USE_REAL_WEBRTC = true;
 
         // ==========================================
-        // TARGETED ZIP CODES — LOADED FROM CSV
+        // TARGETED ZIP CODES — LOADED LAZILY
         // ==========================================
         // File: /data/usa-water-damage-zips.csv
         // Format: one 5-digit ZIP per line, no header.
-        // Export column A from USA_Water_Damage 2.xlsx.
         // ==========================================
         let SERVED_ZIPS = [];
         let SERVED_ZIP_SET = new Set();
+        let zipsPromise = null;
 
-        fetch('/data/usa-water-damage-zips.csv')
-            .then(r => {
-                if (!r.ok) throw new Error('ZIP CSV not found at /data/usa-water-damage-zips.csv');
-                return r.text();
-            })
-            .then(t => {
-                SERVED_ZIPS = t.split(/\r?\n/).map(z => z.trim()).filter(Boolean);
-                SERVED_ZIP_SET = new Set(SERVED_ZIPS);
-                console.log('[HomeConnector] Loaded ' + SERVED_ZIPS.length + ' ZIP codes for coverage check.');
-            })
-            .catch(err => {
-                console.error('[HomeConnector] Failed to load ZIP list:', err);
-                // Coverage checker will show the amber "expanding" message for all ZIPs
-                // until the CSV is available. The call flow still works normally.
-            });
+        function ensureZipsLoaded() {
+            if (zipsPromise) return zipsPromise;
+            zipsPromise = fetch('/data/usa-water-damage-zips.csv', { cache: 'force-cache' })
+                .then(r => {
+                    if (!r.ok) throw new Error('ZIP CSV not found at /data/usa-water-damage-zips.csv');
+                    return r.text();
+                })
+                .then(t => {
+                    SERVED_ZIPS = t.split(/\r?\n/).map(z => z.trim()).filter(Boolean);
+                    SERVED_ZIP_SET = new Set(SERVED_ZIPS);
+                    console.log('[HomeConnector] Loaded ' + SERVED_ZIPS.length + ' ZIP codes for coverage check.');
+                })
+                .catch(err => {
+                    console.error('[HomeConnector] Failed to load ZIP list:', err);
+                });
+            return zipsPromise;
+        }
+
+        // Start the fetch during idle time so it never competes with critical resources.
+        function scheduleZipLoad() {
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(ensureZipsLoaded, { timeout: 2500 });
+            } else {
+                window.addEventListener('load', () => setTimeout(ensureZipsLoaded, 800), { once: true });
+            }
+        }
+        scheduleZipLoad();
 
         // ==========================================
         // ZIP COVERAGE CHECKER
         // ==========================================
-        function checkCoverageZip() {
+        async function checkCoverageZip() {
             const input = document.getElementById('coverageZipInput');
             const result = document.getElementById('coverageZipResult');
             const zip = input.value.trim();
@@ -2528,6 +2646,10 @@
                 input.focus();
                 return;
             }
+
+            result.textContent = 'Checking coverage…';
+            await ensureZipsLoaded();
+            result.className = 'zip-checker-result';
 
             if (SERVED_ZIP_SET.has(zip)) {
                 result.innerHTML = '✅ Emergency water damage pros are available in <strong>' + zip + '</strong>. Tap "Call Now - Free Quote" for priority matching.';
@@ -2608,6 +2730,29 @@
         }
 
         // ==========================================
+        // TWILIO VOICE SDK — LAZY LOADED
+        // ==========================================
+        let twilioSdkPromise = null;
+
+        function loadTwilioSDK() {
+            if (window.Twilio && window.Twilio.Voice) return Promise.resolve();
+            if (twilioSdkPromise) return twilioSdkPromise;
+
+            twilioSdkPromise = new Promise((resolve, reject) => {
+                const s = document.createElement('script');
+                s.src = 'https://cdn.jsdelivr.net/npm/@twilio/voice-sdk@2.1.1/dist/twilio-voice.min.js';
+                s.async = true;
+                s.onload = () => resolve();
+                s.onerror = () => {
+                    twilioSdkPromise = null;
+                    reject(new Error('Failed to load Twilio SDK'));
+                };
+                document.head.appendChild(s);
+            });
+            return twilioSdkPromise;
+        }
+
+        // ==========================================
         // TWILIO VOICE SDK V2 IMPLEMENTATION
         // ==========================================
         let twilioDevice = null;
@@ -2631,6 +2776,9 @@
 
             try {
                 console.log('Initiating REAL WebRTC call via Twilio v2 to:', TARGET_PHONE);
+
+                callStatusEl.textContent = 'Loading caller…';
+                await loadTwilioSDK();
 
                 callStatusEl.textContent = 'Requesting Mic Access...';
                 try {
@@ -2702,32 +2850,57 @@
             const a = o.classList.toggle('active');
             document.body.style.overflow = a ? 'hidden' : '';
             t.textContent = a ? '✕' : '☰';
+            t.setAttribute('aria-expanded', a ? 'true' : 'false');
         }
         function toggleFaq(b) {
             const i = b.closest('.faq-item');
             const o = i.classList.contains('open');
-            document.querySelectorAll('.faq-item').forEach(e => e.classList.remove('open'));
-            if (!o) i.classList.add('open');
+            document.querySelectorAll('.faq-item').forEach(e => {
+                e.classList.remove('open');
+                const q = e.querySelector('.faq-question');
+                if (q) q.setAttribute('aria-expanded', 'false');
+            });
+            if (!o) {
+                i.classList.add('open');
+                b.setAttribute('aria-expanded', 'true');
+            }
         }
-        const obs = new IntersectionObserver((e) => {
-            e.forEach(en => { if (en.isIntersecting) en.target.classList.add('visible'); });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+        // Reveal-on-scroll — skipped entirely for reduced-motion users.
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!prefersReducedMotion && 'IntersectionObserver' in window) {
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach(en => {
+                    if (en.isIntersecting) {
+                        en.target.classList.add('visible');
+                        obs.unobserve(en.target);
+                    }
+                });
+            }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+            document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+        } else {
+            document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+        }
 
         let fVis = false;
         const fBar = document.getElementById('floatingBar');
+        const heroEl = document.querySelector('.hero');
+
         function handleFloat() {
+            if (!heroEl || !fBar) return;
             const s = window.scrollY;
-            const h = document.querySelector('.hero').offsetHeight;
+            const h = heroEl.offsetHeight;
             if (s > h * 0.5 && !fVis) { fBar.classList.add('visible'); fVis = true; }
             else if (s <= h * 0.5 && fVis) { fBar.classList.remove('visible'); fVis = false; }
         }
+
         window.addEventListener('scroll', () => {
-            if (!window.ticking) {
-                requestAnimationFrame(() => { handleFloat(); window.ticking = false; });
-                window.ticking = true;
+            if (!window.__hcTick) {
+                window.__hcTick = true;
+                requestAnimationFrame(() => { handleFloat(); window.__hcTick = false; });
             }
-        });
+        }, { passive: true });
+
         document.addEventListener('DOMContentLoaded', () => {
             const firstFaq = document.querySelector('.faq-item');
             if (firstFaq) {
